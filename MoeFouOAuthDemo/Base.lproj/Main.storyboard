@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="drM-oB-y9h">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--主页-->
+        <scene sceneID="60F-Eo-G3d">
+            <objects>
+                <viewController id="8NT-l7-quw" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="orM-HS-Okb"/>
+                        <viewControllerLayoutGuide type="bottom" id="rCJ-ff-fCf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KoK-dy-RmH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uRR-SO-12B">
+                                <rect key="frame" x="122" y="311" width="131" height="45"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <state key="normal" title="OAuth授权">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="OAuthAciton:" destination="8NT-l7-quw" eventType="touchUpInside" id="o10-77-gZ1"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="uRR-SO-12B" firstAttribute="centerX" secondItem="KoK-dy-RmH" secondAttribute="centerX" id="2F3-eQ-2br"/>
+                            <constraint firstItem="uRR-SO-12B" firstAttribute="centerY" secondItem="KoK-dy-RmH" secondAttribute="centerY" id="AYF-MA-0ci"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="主页" id="2Cm-jh-rbS"/>
+                    <connections>
+                        <outlet property="OAuthButton" destination="uRR-SO-12B" id="ayn-NN-DjZ"/>
+                        <segue destination="IUw-BP-v8M" kind="push" identifier="pushOAuthWebViewController" id="xCa-Ge-pOg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v60-nG-okY" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1056.8" y="123.68815592203899"/>
+        </scene>
+        <!--OAuth授权-->
+        <scene sceneID="kAE-sO-xsA">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="IUw-BP-v8M" customClass="OAuthViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TPt-KN-Qtw"/>
+                        <viewControllerLayoutGuide type="bottom" id="oah-mK-THn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Jty-sd-jGS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eHC-A5-hZm">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="IUw-BP-v8M" id="yBx-iU-gYV"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="eHC-A5-hZm" secondAttribute="trailing" id="an3-lN-J9z"/>
+                            <constraint firstItem="eHC-A5-hZm" firstAttribute="top" secondItem="TPt-KN-Qtw" secondAttribute="bottom" id="bP5-qZ-b75"/>
+                            <constraint firstItem="oah-mK-THn" firstAttribute="top" secondItem="eHC-A5-hZm" secondAttribute="bottom" id="oXC-2b-o4Z"/>
+                            <constraint firstItem="eHC-A5-hZm" firstAttribute="leading" secondItem="Jty-sd-jGS" secondAttribute="leading" id="wmp-Fj-cBb"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="OAuth授权" id="eYG-eD-siY"/>
+                    <connections>
+                        <outlet property="authorizeWebView" destination="eHC-A5-hZm" id="4jT-ai-Nxr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0SL-mf-exp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1799" y="124"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="mJJ-d6-5Pd">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="drM-oB-y9h" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="p1d-V5-DTP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8NT-l7-quw" kind="relationship" relationship="rootViewController" id="4zP-nR-8Kw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gmj-Ks-g0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="318" y="124"/>
+        </scene>
+    </scenes>
+</document>
