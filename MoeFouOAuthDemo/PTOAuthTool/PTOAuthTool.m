@@ -23,8 +23,9 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
 // 第一步 请求未授权的OAuthToken和Secret
 + (void)requestOAuthTokenWithURL:(NSString *)url completionHandler:(requestCompleted)requestCompleted {
     
-    // 获取PTOAuthModel单例对象并设置参数
+    // 创建PTOAuthModel对象
     PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
+    // 添加url
     oauthModel.oauthURL = url;
     
     // 创建含OAuth加密签名的完整GET请求URL
@@ -75,9 +76,9 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
 }
 // 第二步 拼接授权URL供浏览器访问，等待用户确认授权
 + (NSURL *)getAuthorizeURLWithURL:(NSString *)url {
-    // 获取PTOAuthModel单例对象
+    // 创建PTOAuthModel对象
     PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
-    // 替换url
+    // 添加url
     oauthModel.oauthURL = url;
     // 用新的参数创建含OAuth加密签名的完整GET请求URL
     NSURL *authorizeURL = [PTOAuthTool createOAuthCompletedGETURLWithPTOAuthModel:oauthModel inOAuthSteps:OAuthStepsTwo];// 传入步骤参数 第二步
@@ -86,9 +87,9 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
 }
 // 第三步 获取到用户授权后的验证码，发送验证码请求accesstoken
 + (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier completionHandler:(requestCompleted)requestCompleted {
-    // 获取PTOAuthModel单例对象
+    // 创建PTOAuthModel对象
     PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
-    // 替换url,添加验证码
+    // 添加url,添加验证码
     oauthModel.oauthURL = url;
     oauthModel.oauthVerifier = verifier;
     // 用新的参数创建含OAuth加密签名的完整GET请求URL
@@ -139,7 +140,9 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
 
 // 其他GET请求通用方法
 + (void)requestOAuthResourceWithURL:(NSString *)url andParams:(NSDictionary *)params callback:(callback)callback{
+    // 创建PTOAuthModel对象
     PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
+    // 添加url，params
     oauthModel.oauthURL = url;
     oauthModel.params = params;
     // 用新的参数创建GETURL

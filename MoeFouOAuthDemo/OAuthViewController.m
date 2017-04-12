@@ -49,7 +49,7 @@
         [PTOAuthTool requestAccessOAuthTokenAndSecretWithURL:kRequestAccessTokenURL andVerifier:verifier completionHandler:^{
             // 得到的accessToken和Secret已保存存到偏好设置，key:oauth_token, oauth_token_secret
             // 此处可以添加提示信息等效果
-            // 跳转回主界面
+            // 返回主界面
             [self.navigationController popViewControllerAnimated:YES];
 
         }];
