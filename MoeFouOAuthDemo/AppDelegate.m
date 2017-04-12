@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "PTOAuthTool.h"
+
+NSString * const kConsumerKey = @"你的应用key";
+NSString * const kConsumerSecret = @"你的应用secret";
 
 @interface AppDelegate ()
 
@@ -17,6 +21,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:@"consumer_key"]) {
+        [userDefaults setObject:kConsumerKey forKey:@"consumer_key"];
+        [userDefaults setObject:kConsumerSecret forKey:@"consumer_secret"];
+        [userDefaults synchronize];
+    }
+
     return YES;
 }
 

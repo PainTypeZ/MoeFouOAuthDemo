@@ -13,53 +13,59 @@
 typedef NS_ENUM(NSUInteger, OAuthSteps) {
     OAuthStepsOne = 1,
     OAuthStepsTwo,
-    OAuthStepsThree
+    OAuthStepsThree,
+    OAuthStepsGetResource
 };
 
 @implementation PTOAuthTool
 
 #pragma mark - public methods
 // 第一步 请求未授权的OAuthToken和Secret
-+ (void)requestOAuthTokenWithURL:(NSString *)url andConsumerKey:(NSString *)consumerKey andConsumerSecret:(NSString *)consumerSecret completionHandler:(requestCompleted)requestCompleted {
++ (void)requestOAuthTokenWithURL:(NSString *)url completionHandler:(requestCompleted)requestCompleted {
     
     // 获取PTOAuthModel单例对象并设置参数
-    PTOAuthModel *oauthModel = [PTOAuthModel sharedOAuthModel];
+    PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
     oauthModel.oauthURL = url;
-    oauthModel.oauthConsumerKey = consumerKey;
-    oauthModel.oauthConsumerSecret = consumerSecret;
-    // 设置常量属性默认值
-    oauthModel.oauthRequestMethod = @"GET";
-    oauthModel.oauthVersion = @"1.0";
-    oauthModel.oauthSignatureMethod = @"HMAC-SHA1";
+    
+    // 创建含OAuth加密签名的完整GET请求URL
+    NSURL *requestURL = [PTOAuthTool createOAuthCompletedGETURLWithPTOAuthModel:oauthModel inOAuthSteps:OAuthStepsOne];// 传入步骤参数 第一步
     
     // 使用get请求
-    NSURL *requestURL = [PTOAuthTool createOAuthCompletedGETURLWithSharedOAuthModelInOAuthSteps:OAuthStepsOne];// 传入步骤参数 第一步
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL];
-
+    
     // 创建会话
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data) {
             NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSMutableDictionary *tokenDictionary = [NSMutableDictionary dictionary];
-            NSArray *componentArray = [dataString componentsSeparatedByString:@"&"];
-            for (NSString *subString in componentArray) {
-                NSArray *subArray = [subString componentsSeparatedByString:@"="];
-                NSString *keyString = [subArray firstObject];
-                NSString *valueString = [subArray lastObject];
-                [tokenDictionary setObject:valueString forKey:keyString];
-            }
-            if ([tokenDictionary[@"oauth_callback_confirmed"] isEqualToString:@"1"]) {
-                NSLog(@"OAuth授权第一步成功，PTOAuthtool已获取到未授权的OAuthToken和OAuthTokenSecret");
+            if ([dataString containsString:@"oauth_token="]) {
+                NSMutableDictionary *tokenDictionary = [NSMutableDictionary dictionary];
+                NSArray *componentArray = [dataString componentsSeparatedByString:@"&"];
+                for (NSString *subString in componentArray) {
+                    NSArray *subArray = [subString componentsSeparatedByString:@"="];
+                    NSString *keyString = [subArray firstObject];
+                    NSString *valueString = [subArray lastObject];
+                    [tokenDictionary setObject:valueString forKey:keyString];
+                }
+                NSString *oauthToken = tokenDictionary[@"oauth_token"];
+                NSString *oauthTokenSecret = tokenDictionary[@"oauth_token_secret"];
+                NSLog(@"oauthToken:%@\noauthTokenSecret:%@", oauthToken, oauthTokenSecret);
+                // 将返回的未授权的token和secret写入偏好设置
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:oauthToken forKey:@"oauth_token"] ;
+                [userDefaults setObject:oauthTokenSecret forKey:@"oauth_token_secret"];
+                [userDefaults synchronize];
+                
+                NSLog(@"OAuth授权第一步成功，获取到未授权的oauth_token和oauth_token_secret已写入偏好设置");
+                
             }else{
                 NSLog(@"OAuth授权第一步失败，错误信息:%@", dataString);
                 return;
             }
-            // 将返回的token和secret赋值到单例model中
-            oauthModel.oauthToken = tokenDictionary[@"oauth_token"];
-            oauthModel.oauthTokenSecret = tokenDictionary[@"oauth_token_secret"];
             // 返回block
-            requestCompleted();
+            dispatch_async(dispatch_get_main_queue(), ^{
+                requestCompleted();
+            });
         }else{
             NSLog(@"%@", [error description]);
         }
@@ -70,40 +76,59 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
 // 第二步 拼接授权URL供浏览器访问，等待用户确认授权
 + (NSURL *)getAuthorizeURLWithURL:(NSString *)url {
     // 获取PTOAuthModel单例对象
-    PTOAuthModel *oauthModel = [PTOAuthModel sharedOAuthModel];
+    PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
     // 替换url
     oauthModel.oauthURL = url;
-    // 用新的参数创建GETURL
-    NSURL *authorizeURL = [PTOAuthTool createOAuthCompletedGETURLWithSharedOAuthModelInOAuthSteps:OAuthStepsTwo];// 传入步骤参数 第二步
+    // 用新的参数创建含OAuth加密签名的完整GET请求URL
+    NSURL *authorizeURL = [PTOAuthTool createOAuthCompletedGETURLWithPTOAuthModel:oauthModel inOAuthSteps:OAuthStepsTwo];// 传入步骤参数 第二步
     NSLog(@"OAuth授权第二步URL拼接成功，请等待用户在网页中确认授权");
     return authorizeURL;
 }
 // 第三步 获取到用户授权后的验证码，发送验证码请求accesstoken
-+ (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier callback:(callback)callback {
++ (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier completionHandler:(requestCompleted)requestCompleted {
     // 获取PTOAuthModel单例对象
-    PTOAuthModel *oauthModel = [PTOAuthModel sharedOAuthModel];
+    PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
     // 替换url,添加验证码
     oauthModel.oauthURL = url;
-    oauthModel.verifier = verifier;
-    // 用新的参数创建GETURL
-    NSURL *requestURL = [PTOAuthTool createOAuthCompletedGETURLWithSharedOAuthModelInOAuthSteps:OAuthStepsThree];// 传入步骤参数 第三步
+    oauthModel.oauthVerifier = verifier;
+    // 用新的参数创建含OAuth加密签名的完整GET请求URL
+    NSURL *requestURL = [PTOAuthTool createOAuthCompletedGETURLWithPTOAuthModel:oauthModel inOAuthSteps:OAuthStepsThree];// 传入步骤参数 第三步
+    
+    // 使用get请求
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL];
     // 创建会话
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data) {
             NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSMutableDictionary *accessTokenDictionary = [NSMutableDictionary dictionary];
-            NSArray *componentArray = [dataString componentsSeparatedByString:@"&"];
-            for (NSString *subString in componentArray) {
-                NSArray *subArray = [subString componentsSeparatedByString:@"="];
-                NSString *keyString = [subArray firstObject];
-                NSString *valueString = [subArray lastObject];
-                [accessTokenDictionary setObject:valueString forKey:keyString];
+            if ([dataString containsString:@"oauth_token="]) {
+                NSMutableDictionary *accessTokenDictionary = [NSMutableDictionary dictionary];
+                NSArray *componentArray = [dataString componentsSeparatedByString:@"&"];
+                for (NSString *subString in componentArray) {
+                    NSArray *subArray = [subString componentsSeparatedByString:@"="];
+                    NSString *keyString = [subArray firstObject];
+                    NSString *valueString = [subArray lastObject];
+                    [accessTokenDictionary setObject:valueString forKey:keyString];
+                }
+                
+                NSString *accessOAuthToken = accessTokenDictionary[@"oauth_token"];
+                NSString *accessOAuthTokenSecret = accessTokenDictionary[@"oauth_token_secret"];
+                NSLog(@"accessOAuthToken:%@\naccessOAuthTokenSecret:%@", accessOAuthToken, accessOAuthTokenSecret);
+                // 将返回的已授权token和secret写入偏好设置
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:accessOAuthToken forKey:@"oauth_token"];
+                [userDefaults setObject:accessOAuthTokenSecret forKey:@"oauth_token_secret"];
+                [userDefaults synchronize];
+                
+                NSLog(@"OAuth授权第三步成功，已授权的oauth_token和oauth_token_secret已写入偏好设置，key:oauth_token, oauth_token_secret");
+            }else{
+                NSLog(@"OAuth授权第三步失败，错误信息:%@", dataString);
+                return;
             }
-            NSLog(@"OAuth授权第三步成功，请妥善保存token和secret");
-            // 返回包含已授权token和secret的字典
-            callback(accessTokenDictionary);
+            // 返回block
+            dispatch_async(dispatch_get_main_queue(), ^{
+                requestCompleted();
+            });
         }else{
             NSLog(@"%@", [error description]);
         }
@@ -112,14 +137,32 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
     [task resume];
 }
 
+// 其他GET请求通用方法
++ (void)requestOAuthResourceWithURL:(NSString *)url andParams:(NSDictionary *)params callback:(callback)callback{
+    PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
+    oauthModel.oauthURL = url;
+    oauthModel.params = params;
+    // 用新的参数创建GETURL
+    NSURL *requestURL = [PTOAuthTool createOAuthCompletedGETURLWithPTOAuthModel:oauthModel inOAuthSteps:OAuthStepsGetResource];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL];
+    // 创建会话
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        // 此处的json解析需要进一步完善
+        callback(jsonDictionary);
+    }];
+    // 开始任务
+    [task resume];
+}
+
+
 #pragma mark - private medthods
-// 根据步骤数用PTOAuthModel单例对象生成OAuth加密签名,返回拼接好的URL
-+ (NSURL *)createOAuthCompletedGETURLWithSharedOAuthModelInOAuthSteps:(OAuthSteps)oauthStep  {
-    // 获取PTOAuthModel单例对象
-    PTOAuthModel *oauthModel = [PTOAuthModel sharedOAuthModel];
+// 根据步骤数用传入PTOAuthModel实例生成OAuth加密签名,返回拼接好的URL
++ (NSURL *)createOAuthCompletedGETURLWithPTOAuthModel:(PTOAuthModel *)oauthModel inOAuthSteps:(OAuthSteps)oauthStep {
     
-    // 创建参数字典
-    NSMutableDictionary *paramsDictionary = [NSMutableDictionary dictionary];
+    // 创建参数字典,判断是否为通用方法
+    NSMutableDictionary *paramsDictionary = (oauthStep == OAuthStepsGetResource) ? [NSMutableDictionary dictionaryWithDictionary:oauthModel.params] : [NSMutableDictionary dictionary];
     [paramsDictionary setObject:oauthModel.oauthConsumerKey forKey:@"oauth_consumer_key"];
     [paramsDictionary setObject:oauthModel.oauthTimestamp forKey:@"oauth_timestamp"];
     [paramsDictionary setObject:oauthModel.oauthNonce forKey:@"oauth_nonce"];
@@ -131,7 +174,7 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
     }
     // 判断是否包含verifier(只有第三步需要verifier)
     if (oauthStep == OAuthStepsThree) {
-        [paramsDictionary setObject:oauthModel.verifier forKey:@"verifier"];
+        [paramsDictionary setObject:oauthModel.oauthVerifier forKey:@"verifier"];
     }
     // 得到参数字符串(升序)
     NSString *paramsString = [NSString ascendingOrderGETRequesetParamsDictionary:paramsDictionary];
@@ -142,8 +185,8 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
     NSString *baseString = [NSString stringWithFormat:@"%@&%@&%@", oauthModel.oauthRequestMethod, encodeURL, encodeParams];
     // 得到encodeSignature
     NSString *secret = @"";
-    // 判断是否包含oauth_token_secret(除第三步外，都不包含oauth_token_secret)
-    if (oauthStep == OAuthStepsThree) {
+    // 判断是否包含oauth_token_secret(第三步和通用方法，都包含oauth_token_secret)
+    if (oauthStep >= OAuthStepsThree) {
         secret = [NSString stringWithFormat:@"%@&%@", oauthModel.oauthConsumerSecret, oauthModel.oauthTokenSecret];
     } else {
         secret = [NSString stringWithFormat:@"%@&", oauthModel.oauthConsumerSecret];
@@ -152,7 +195,7 @@ typedef NS_ENUM(NSUInteger, OAuthSteps) {
     NSString *signature = [NSString base64_HMAC_SHA1:secret string:baseString];// 自定义分类实现
     // OAuth签名URL编码
     NSString *encodeSignature = [NSString urlEncodeString:signature];// 自定义分类实现
-
+    
     NSString *path = [NSString stringWithFormat:@"%@?%@&oauth_signature=%@", oauthModel.oauthURL, paramsString, encodeSignature];
     NSURL *completedGETURL = [NSURL URLWithString:path];
     return completedGETURL;

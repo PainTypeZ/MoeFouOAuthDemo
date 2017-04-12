@@ -97,12 +97,12 @@
 		07E7B6401E9D12B1004C9CF1 /* PTOAuthTool */ = {
 			isa = PBXGroup;
 			children = (
-				07E7B6411E9D12B1004C9CF1 /* NSString+PTCollection.h */,
-				07E7B6421E9D12B1004C9CF1 /* NSString+PTCollection.m */,
-				07E7B6431E9D12B1004C9CF1 /* PTOAuthModel.h */,
-				07E7B6441E9D12B1004C9CF1 /* PTOAuthModel.m */,
 				07E7B6451E9D12B1004C9CF1 /* PTOAuthTool.h */,
 				07E7B6461E9D12B1004C9CF1 /* PTOAuthTool.m */,
+				07E7B6431E9D12B1004C9CF1 /* PTOAuthModel.h */,
+				07E7B6441E9D12B1004C9CF1 /* PTOAuthModel.m */,
+				07E7B6411E9D12B1004C9CF1 /* NSString+PTCollection.h */,
+				07E7B6421E9D12B1004C9CF1 /* NSString+PTCollection.m */,
 			);
 			path = PTOAuthTool;
 			sourceTree = "<group>";

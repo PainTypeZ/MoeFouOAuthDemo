@@ -6,10 +6,6 @@
 //  Copyright © 2017年 彭平军. All rights reserved.
 //
 
-// 填上你的moefou应用信息
-#define kConsumerKey @"consumer_key"
-#define kConsumerSecret @"consumer_secret"
-
 #define kRequestTokenURL @"http://api.moefou.org/oauth/request_token"
 #define kRequestAuthorizeURL @"http://api.moefou.org/oauth/authorize"
 #define kRequestAccessTokenURL @"http://api.moefou.org/oauth/access_token"
@@ -31,7 +27,9 @@
 
 - (void)oauthStepsBegin {
     // OAuth授权第一步
-    [PTOAuthTool requestOAuthTokenWithURL:kRequestTokenURL andConsumerKey:kConsumerKey andConsumerSecret:kConsumerSecret completionHandler:^{
+    PTOAuthModel *oauthModel = [[PTOAuthModel alloc] init];
+    oauthModel.oauthURL = kRequestTokenURL;
+    [PTOAuthTool requestOAuthTokenWithURL:kRequestTokenURL completionHandler:^{
         // OAuth授权第二步
         NSURL *requestURL = [PTOAuthTool getAuthorizeURLWithURL:kRequestAuthorizeURL];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL];
@@ -48,13 +46,8 @@
         NSString *subString = [[path componentsSeparatedByString:@"&"] firstObject];
         NSString *verifier = [[subString componentsSeparatedByString:@"="] lastObject];
         // OAuth授权第三步
-        [PTOAuthTool requestAccessOAuthTokenAndSecretWithURL:kRequestAccessTokenURL andVerifier:verifier callback:^(NSDictionary *accessTokenDictionary) {
-            //得到返回的accessToken和Secret，可以自定义保存方式和位置, demo选择保存到偏好设置
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:accessTokenDictionary[@"oauth_token"] forKey:@"oauth_token"];
-            [userDefaults setObject:accessTokenDictionary[@"oauth_token_secret"] forKey:@"oauth_token_secret"];
-            [userDefaults synchronize];
-            NSLog(@"%@", accessTokenDictionary);
+        [PTOAuthTool requestAccessOAuthTokenAndSecretWithURL:kRequestAccessTokenURL andVerifier:verifier completionHandler:^{
+            // 得到的accessToken和Secret已保存存到偏好设置，key:oauth_token, oauth_token_secret
             // 此处可以添加提示信息等效果
             // 跳转回主界面
             [self.navigationController popViewControllerAnimated:YES];

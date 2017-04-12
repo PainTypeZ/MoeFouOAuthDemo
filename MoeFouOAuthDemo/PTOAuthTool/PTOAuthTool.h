@@ -11,17 +11,19 @@
 // 不返回值的block
 typedef void (^requestCompleted)();
 // 回调函数
-typedef void (^callback)(NSDictionary *accessTokenDictionary);
+typedef void (^callback)(id object);
 
 
 @interface PTOAuthTool : NSObject
 // 第一步 请求未授权的OAuthToken和Secret
-+ (void)requestOAuthTokenWithURL:(NSString *)url andConsumerKey:(NSString *)consumerKey andConsumerSecret:(NSString *)consumerSecret completionHandler:(requestCompleted)requestCompleted;
++ (void)requestOAuthTokenWithURL:(NSString *)url completionHandler:(requestCompleted)requestCompleted;
 
 // 第二步 拼接授权URL供浏览器访问，等待用户确认授权
 + (NSURL *)getAuthorizeURLWithURL:(NSString *)url;
 
 // 第三步 获取到用户授权后的验证码，发送验证码请求accesstoken
-+ (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier callback:(callback)callback;
++ (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier completionHandler:(requestCompleted)requestCompleted;
 
+// 其他GET请求通用方法
++ (void)requestOAuthResourceWithURL:(NSString *)url andParams:(NSDictionary *)params callback:(callback)object;
 @end

@@ -9,16 +9,23 @@
 #import "PTOAuthModel.h"
 
 @implementation PTOAuthModel
-// 包含线程安全的单例声明
-+ (instancetype)sharedOAuthModel
+// 覆写init构造方法，设置默认值
+- (instancetype)init
 {
-    static dispatch_once_t once;
-    static id oauthModel;
-    dispatch_once(&once, ^{
-        oauthModel = [[self alloc] init];
+    self = [super init];
+    if (self) {
+        _oauthRequestMethod = @"GET";
+        _oauthVersion = @"1.0";
+        _oauthSignatureMethod = @"HMAC-SHA1";
         
-    });
-    return oauthModel;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        _oauthConsumerKey = [userDefaults objectForKey:@"consumer_key"];
+        _oauthConsumerSecret = [userDefaults objectForKey:@"consumer_secret"];
+        
+        _oauthToken = [userDefaults objectForKey:@"oauth_token"];
+        _oauthTokenSecret = [userDefaults objectForKey:@"oauth_token_secret"];
+    }
+    return self;
 }
 
 // 重写变量属性的getter方法，每次调用oauthModel.xxxx自动生成新值
@@ -33,4 +40,5 @@
     _oauthNonce = [NSString stringWithFormat:@"%u", arc4random()];
     return _oauthNonce;
 }
+
 @end
