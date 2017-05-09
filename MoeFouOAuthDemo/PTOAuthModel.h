@@ -28,5 +28,7 @@
 
 // 通用OAuthGET请求的参数字典
 @property (strong, nonatomic) NSDictionary *params;
+// 单例构造方法
+//+ (instancetype)sharedOAuthModel;
 
 @end

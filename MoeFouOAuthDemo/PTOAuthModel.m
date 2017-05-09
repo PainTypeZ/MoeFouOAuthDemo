@@ -9,7 +9,7 @@
 #import "PTOAuthModel.h"
 
 @implementation PTOAuthModel
-// 覆写init构造方法，设置默认值
+
 - (instancetype)init
 {
     self = [super init];
@@ -40,5 +40,4 @@
     _oauthNonce = [NSString stringWithFormat:@"%u", arc4random()];
     return _oauthNonce;
 }
-
 @end

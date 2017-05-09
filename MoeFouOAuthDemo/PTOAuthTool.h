@@ -24,6 +24,6 @@ typedef void (^callback)(id object);
 // 第三步 获取到用户授权后的验证码，发送验证码请求accesstoken
 + (void)requestAccessOAuthTokenAndSecretWithURL:(NSString *)url andVerifier:(NSString *)verifier completionHandler:(requestCompleted)requestCompleted;
 
-// 其他GET请求通用方法
-+ (void)requestOAuthResourceWithURL:(NSString *)url andParams:(NSDictionary *)params callback:(callback)object;
+// 获取OAuthResource请求的完整URL
++ (NSURL *)getCompletedOAuthResourceRequestURLWithURLString:(NSString *)url andParams:(NSDictionary *)params;
 @end

@@ -7,19 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07DCFE331EC1EA730027E5C8 /* PTOAuthTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DCFE2E1EC1EA730027E5C8 /* PTOAuthTool.m */; };
+		07DCFE341EC1EA730027E5C8 /* PTOAuthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DCFE301EC1EA730027E5C8 /* PTOAuthModel.m */; };
+		07DCFE351EC1EA730027E5C8 /* NSString+PTCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DCFE321EC1EA730027E5C8 /* NSString+PTCollection.m */; };
 		07E7B62B1E9D1241004C9CF1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B62A1E9D1241004C9CF1 /* main.m */; };
 		07E7B62E1E9D1241004C9CF1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B62D1E9D1241004C9CF1 /* AppDelegate.m */; };
 		07E7B6311E9D1241004C9CF1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B6301E9D1241004C9CF1 /* ViewController.m */; };
 		07E7B6341E9D1241004C9CF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07E7B6321E9D1241004C9CF1 /* Main.storyboard */; };
 		07E7B6361E9D1241004C9CF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07E7B6351E9D1241004C9CF1 /* Assets.xcassets */; };
 		07E7B6391E9D1241004C9CF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07E7B6371E9D1241004C9CF1 /* LaunchScreen.storyboard */; };
-		07E7B6471E9D12B1004C9CF1 /* NSString+PTCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B6421E9D12B1004C9CF1 /* NSString+PTCollection.m */; };
-		07E7B6481E9D12B1004C9CF1 /* PTOAuthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B6441E9D12B1004C9CF1 /* PTOAuthModel.m */; };
-		07E7B6491E9D12B1004C9CF1 /* PTOAuthTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B6461E9D12B1004C9CF1 /* PTOAuthTool.m */; };
 		07E7B64C1E9D12B6004C9CF1 /* OAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E7B64B1E9D12B6004C9CF1 /* OAuthViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07DCFE2D1EC1EA730027E5C8 /* PTOAuthTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTOAuthTool.h; sourceTree = "<group>"; };
+		07DCFE2E1EC1EA730027E5C8 /* PTOAuthTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTOAuthTool.m; sourceTree = "<group>"; };
+		07DCFE2F1EC1EA730027E5C8 /* PTOAuthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTOAuthModel.h; sourceTree = "<group>"; };
+		07DCFE301EC1EA730027E5C8 /* PTOAuthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTOAuthModel.m; sourceTree = "<group>"; };
+		07DCFE311EC1EA730027E5C8 /* NSString+PTCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PTCollection.h"; sourceTree = "<group>"; };
+		07DCFE321EC1EA730027E5C8 /* NSString+PTCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PTCollection.m"; sourceTree = "<group>"; };
 		07E7B6261E9D1241004C9CF1 /* MoeFouOAuthDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoeFouOAuthDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E7B62A1E9D1241004C9CF1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		07E7B62C1E9D1241004C9CF1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -30,12 +36,6 @@
 		07E7B6351E9D1241004C9CF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07E7B6381E9D1241004C9CF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		07E7B63A1E9D1241004C9CF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		07E7B6411E9D12B1004C9CF1 /* NSString+PTCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PTCollection.h"; sourceTree = "<group>"; };
-		07E7B6421E9D12B1004C9CF1 /* NSString+PTCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PTCollection.m"; sourceTree = "<group>"; };
-		07E7B6431E9D12B1004C9CF1 /* PTOAuthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTOAuthModel.h; sourceTree = "<group>"; };
-		07E7B6441E9D12B1004C9CF1 /* PTOAuthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTOAuthModel.m; sourceTree = "<group>"; };
-		07E7B6451E9D12B1004C9CF1 /* PTOAuthTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTOAuthTool.h; sourceTree = "<group>"; };
-		07E7B6461E9D12B1004C9CF1 /* PTOAuthTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTOAuthTool.m; sourceTree = "<group>"; };
 		07E7B64A1E9D12B6004C9CF1 /* OAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthViewController.h; sourceTree = "<group>"; };
 		07E7B64B1E9D12B6004C9CF1 /* OAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,6 +77,12 @@
 				07E7B64A1E9D12B6004C9CF1 /* OAuthViewController.h */,
 				07E7B64B1E9D12B6004C9CF1 /* OAuthViewController.m */,
 				07E7B6401E9D12B1004C9CF1 /* PTOAuthTool */,
+				07DCFE2D1EC1EA730027E5C8 /* PTOAuthTool.h */,
+				07DCFE2E1EC1EA730027E5C8 /* PTOAuthTool.m */,
+				07DCFE2F1EC1EA730027E5C8 /* PTOAuthModel.h */,
+				07DCFE301EC1EA730027E5C8 /* PTOAuthModel.m */,
+				07DCFE311EC1EA730027E5C8 /* NSString+PTCollection.h */,
+				07DCFE321EC1EA730027E5C8 /* NSString+PTCollection.m */,
 				07E7B6321E9D1241004C9CF1 /* Main.storyboard */,
 				07E7B6351E9D1241004C9CF1 /* Assets.xcassets */,
 				07E7B6371E9D1241004C9CF1 /* LaunchScreen.storyboard */,
@@ -97,12 +103,6 @@
 		07E7B6401E9D12B1004C9CF1 /* PTOAuthTool */ = {
 			isa = PBXGroup;
 			children = (
-				07E7B6451E9D12B1004C9CF1 /* PTOAuthTool.h */,
-				07E7B6461E9D12B1004C9CF1 /* PTOAuthTool.m */,
-				07E7B6431E9D12B1004C9CF1 /* PTOAuthModel.h */,
-				07E7B6441E9D12B1004C9CF1 /* PTOAuthModel.m */,
-				07E7B6411E9D12B1004C9CF1 /* NSString+PTCollection.h */,
-				07E7B6421E9D12B1004C9CF1 /* NSString+PTCollection.m */,
 			);
 			path = PTOAuthTool;
 			sourceTree = "<group>";
@@ -181,11 +181,11 @@
 			files = (
 				07E7B64C1E9D12B6004C9CF1 /* OAuthViewController.m in Sources */,
 				07E7B6311E9D1241004C9CF1 /* ViewController.m in Sources */,
-				07E7B6491E9D12B1004C9CF1 /* PTOAuthTool.m in Sources */,
-				07E7B6481E9D12B1004C9CF1 /* PTOAuthModel.m in Sources */,
-				07E7B6471E9D12B1004C9CF1 /* NSString+PTCollection.m in Sources */,
 				07E7B62E1E9D1241004C9CF1 /* AppDelegate.m in Sources */,
 				07E7B62B1E9D1241004C9CF1 /* main.m in Sources */,
+				07DCFE351EC1EA730027E5C8 /* NSString+PTCollection.m in Sources */,
+				07DCFE331EC1EA730027E5C8 /* PTOAuthTool.m in Sources */,
+				07DCFE341EC1EA730027E5C8 /* PTOAuthModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
 @interface NSString (PTCollection)
-// URL编码，9.0之前使用此方法，9.0之后使用原生方法
+// URL编码，9.0之前使用此方法，9.0之后有原生方法，但是不好用
 + (NSString *)urlEncodeString:(NSString *)string;
 // Base64 + HAMC-SHA1加密
 + (NSString *)base64_HMAC_SHA1:(NSString *)key string:(NSString *)string;
